@@ -33,8 +33,12 @@ def main():
   interp_dr_array = dr(dr_temp_x_input_onedegrees)
   
   user_temp = st.number_input('Enter Temp (F)')
+  user_alt = st.number_input('Enter Field Altitude (FT)')
   
-  st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+  if user_alt == 0:
+    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+  if 0 < user_alt <=2000:
+    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
 if __name__ == "__main__":
   main()
