@@ -32,7 +32,7 @@ def main():
   
   user_temp = st.number_input('Enter Temp')
   
-  st.metric('Density Ratio', round(dr(user_temp), 2), delta=None, delta_color="normal")
+  st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
 if __name__ == "__main__":
   main()
