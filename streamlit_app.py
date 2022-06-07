@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import numpy as np
 from scipy import interpolate
+import altair as alt
 
 
 def main():
@@ -17,6 +18,20 @@ def main():
 
   st.line_chart(dr_sealevel_array)
   st.line_chart(dr(test_x))
+  
+  source = pd.DataFrame({
+  'x': test_x,
+  'f(x)': dr(test_x)
+  })
+
+  c = alt.Chart(source).mark_line().encode(
+      x='x',
+      y='f(x)'
+  )
+  
+  st.altair_chart(c, use_container_width = True)
+
+
   
 if __name__ == "__main__":
   main()
