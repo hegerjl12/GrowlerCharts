@@ -15,8 +15,14 @@ def main():
   
   dr_sealevel = [1.3,1.27,1.23,1.2,1.175,1.15,1.125,1.1,1.08,1.06,1.04,1.02,1.0,0.98,0.96,0.94,0.925,0.91,0.89,0.88,0.86]
   dr_2k = [1.2,1.175,1.15,1.125,1.09,1.07,1.05,1.03,1.01,0.99,0.975,0.95,0.94,0.92,0.9,0.88,0.87,0.85,0.83, 0.82,0.81]
+  dr_4k = [1.12,1.09,1.06,1.04,1.02,0.99,0.975,0.96,0.94,0.925,0.88,0.87,0.85,0.83,0.82,0.8,0.78,0.775,0.765,0.76]
+  dr_6k = [1.04,1.02,0.99,0.97,0.94,0.925,0.91,0.88,0.87,0.85,0.84,0.825,0.8,0.78,0.775,0.76,0.74,0.73,0.72,0.71,0.7]
+  dr_8k = [0.96,0.94,0.92,0.9,0.875,0.86,0.83,0.82,0.81,0.79,0.78,0.76,0.74,0.73,0.715,0.7,0.69,0.68,0.675,0.67,0.66]
   dr_sealevel_array = np.array(dr_sealevel)
   dr_2k_array = np.array(dr_2k)
+  dr_4k_array = np.array(dr_4k)
+  dr_6k_array = np.array(dr_6k)
+  dr_8k_array = np.array(dr_8k)
   
   user_temp = st.number_input('Enter Temp (F)', step=1)
   user_alt = st.number_input('Enter Field Altitude (FT)', step=100)
@@ -62,7 +68,7 @@ def main():
     
   if 2000 < user_alt <=4000:
     ratio = user_alt/4000
-    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
@@ -83,7 +89,7 @@ def main():
   
   if 4000 < user_alt <=6000:
     ratio = user_alt/6000
-    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
@@ -104,7 +110,7 @@ def main():
     
   if 6000 < user_alt <=8000:
     ratio = user_alt/8000
-    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
