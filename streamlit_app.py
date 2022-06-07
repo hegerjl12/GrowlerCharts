@@ -7,6 +7,8 @@ import altair as alt
 
 def main():
   
+  st.set_page_config(page_title='F18 Toolbox', page_icon='✈', layout="centered", initial_sidebar_state="auto", menu_items=None)
+  
   dr_temp_x_input_tendegrees = np.arange(-60,150, 10)
   dr_temp_x_input_onedegrees = np.arange(-60,141)
   dr_dr_y_input = np.arange(0.5,1.31, 0.01, dtype=float)
