@@ -28,7 +28,10 @@ def main():
   
   st.altair_chart(c, use_container_width = True)
 
-
+  interp_dr_array = dr(dr_temp_x_input_onedegrees)
+  
+  st.write(interp_dr_array)
+  
   
 if __name__ == "__main__":
   main()
