@@ -14,8 +14,7 @@ def main():
   dr = interpolate.interp1d(dr_temp_x, dr_sealevel_array, kind='linear', fill_value='extrapolate')
   
   test_x = np.arange(-60,141)
-  
-  st.write(test)
+
   st.line_chart(dr_sealevel_array)
   st.line_chart(dr(test_x))
   
