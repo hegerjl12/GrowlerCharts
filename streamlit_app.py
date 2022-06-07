@@ -59,6 +59,70 @@ def main():
 
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+    
+  if 2000 < user_alt <=4000:
+    ratio = user_alt/4000
+    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    
+    dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
+    
+    source = pd.DataFrame({
+      'Temp(F)': dr_temp_x_input_onedegrees,
+      'Density Ratio': dr(dr_temp_x_input_onedegrees)
+    })
+
+    c = alt.Chart(source).mark_line().encode(
+        x='Temp(F)',
+        y='Density Ratio'
+    )
+
+    st.altair_chart(c, use_container_width = True)
+
+    interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
+  if 4000 < user_alt <=6000:
+    ratio = user_alt/6000
+    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    
+    dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
+    
+    source = pd.DataFrame({
+      'Temp(F)': dr_temp_x_input_onedegrees,
+      'Density Ratio': dr(dr_temp_x_input_onedegrees)
+    })
+
+    c = alt.Chart(source).mark_line().encode(
+        x='Temp(F)',
+        y='Density Ratio'
+    )
+
+    st.altair_chart(c, use_container_width = True)
+
+    interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+    
+  if 6000 < user_alt <=8000:
+    ratio = user_alt/8000
+    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    
+    dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
+    
+    source = pd.DataFrame({
+      'Temp(F)': dr_temp_x_input_onedegrees,
+      'Density Ratio': dr(dr_temp_x_input_onedegrees)
+    })
+
+    c = alt.Chart(source).mark_line().encode(
+        x='Temp(F)',
+        y='Density Ratio'
+    )
+
+    st.altair_chart(c, use_container_width = True)
+
+    interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+    
+    
 if __name__ == "__main__":
   main()
