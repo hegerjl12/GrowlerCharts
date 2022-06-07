@@ -13,8 +13,8 @@ def main():
   
   #dr = interpolate.interp1d(dr_temp_x, dr_sealevel_array)
   
-  st.write(len(dr_temp_x)
-  st.write(len(dr_sealevel_array)
+  st.write(len(dr_temp_x))
+  st.write(len(dr_sealevel_array))
   
   
 if __name__ == "__main__":
