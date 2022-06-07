@@ -17,7 +17,7 @@ def main():
   
   st.write(test)
   st.line_chart(dr_sealevel_array)
-  
+  st.line_chart(dr(dr_temp_x))
   
 if __name__ == "__main__":
   main()
