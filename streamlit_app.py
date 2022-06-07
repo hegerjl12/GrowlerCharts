@@ -42,7 +42,6 @@ def main():
   if 0 < user_alt <=2000:
     ratio = user_alt/2000
     interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
-    interp_x = (1-
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
