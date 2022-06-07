@@ -6,7 +6,7 @@ import numpy as np
 
 def main():
   
-  dr_temp_x = np.arrange(-60,141)
+  dr_temp_x = np.arange(-60,141)
   
   st.write(dr_temp_x)
   
