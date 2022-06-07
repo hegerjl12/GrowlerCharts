@@ -11,7 +11,7 @@ def main():
   dr_sealevel = [1.3,1.27,1.23,1.2,1.175,1.15,1.125,1.1,1.08,1.06,1.04,1.02,1.0,0.98,0.96,0.94,0.925,0.91,0.89,0.88,0.86]
   dr_sealevel_array = np.array(dr_sealevel)
   
-  dr = interpolate.interp1d(dr_temp_x, dr_sealevel_array, kind='linear', fill_value='extrapolate')
+  dr = interpolate.interp1d(dr_temp_x, dr_sealevel_array, kind='quadratic', fill_value='extrapolate')
   
   test_x = np.arange(-60,141)
 
