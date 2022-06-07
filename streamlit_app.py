@@ -67,7 +67,7 @@ def main():
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
     
   if 2000 < user_alt <=4000:
-    ratio = user_alt/4000
+    ratio = (user_alt-2000)/2000
     interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
@@ -88,7 +88,7 @@ def main():
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
   if 4000 < user_alt <=6000:
-    ratio = user_alt/6000
+    ratio = (user_alt-4000)/2000
     interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
@@ -109,7 +109,7 @@ def main():
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
     
   if 6000 < user_alt <=8000:
-    ratio = user_alt/8000
+    ratio = (user_alt-6000)/2000
     interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
