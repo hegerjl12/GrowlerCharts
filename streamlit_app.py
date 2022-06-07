@@ -13,7 +13,7 @@ def main():
   
   dr = interpolate.interp1d(dr_temp_x, dr_sealevel_array, kind='linear', fill_value='extrapolate')
   
-  st.write(dr(60))
+  st.write(dr(65))
   st.line_chart(dr_sealevel_array)
   
   
