@@ -18,7 +18,7 @@ def main():
   
   source = pd.DataFrame({
   'Temp(F)': dr_temp_x_input_onedegrees,
-  'Density Ratio': dr(test_x)
+  'Density Ratio': dr(dr_temp_x_input_onedegrees)
   })
 
   c = alt.Chart(source).mark_line().encode(
