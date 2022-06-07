@@ -30,7 +30,7 @@ def main():
 
   interp_dr_array = dr(dr_temp_x_input_onedegrees)
   
-  user_temp = st.number_input('Enter Temp')
+  user_temp = st.number_input('Enter Temp (F)')
   
   st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
