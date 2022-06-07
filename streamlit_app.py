@@ -17,7 +17,7 @@ def main():
   dr = interpolate.interp1d(dr_temp_x_input_tendegrees, dr_sealevel_array, kind='quadratic', fill_value='extrapolate')
   
   source = pd.DataFrame({
-  'Temp(F)': dr_temp_x_input_ondegrees,
+  'Temp(F)': dr_temp_x_input_onedegrees,
   'Density Ratio': dr(test_x)
   })
 
