@@ -30,8 +30,9 @@ def main():
 
   interp_dr_array = dr(dr_temp_x_input_onedegrees)
   
-  st.write(interp_dr_array)
+  user_temp = st.number_input('Enter Temp')
   
+  st.metric('Density Ratio', dr(user_temp), delta=None, delta_color="normal")
   
 if __name__ == "__main__":
   main()
