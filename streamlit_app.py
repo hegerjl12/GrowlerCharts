@@ -14,7 +14,7 @@ def main():
   dr_dr_y_input = np.arange(0.5,1.31, 0.01, dtype=float)
   
   dr_sealevel = [1.3,1.27,1.23,1.2,1.175,1.15,1.125,1.1,1.08,1.06,1.04,1.02,1.0,0.98,0.96,0.94,0.925,0.91,0.89,0.88,0.86]
-  dr_2k = [1.2,1.175,1.5,1.125,1.09,1.07,1.05,1.03,1.01,0.99,0.975,0.95,0.94,0.92,0.9,0.88,0.87,0.85,0.83, 0.82,0.81]
+  dr_2k = [1.2,1.175,1.15,1.125,1.09,1.07,1.05,1.03,1.01,0.99,0.975,0.95,0.94,0.92,0.9,0.88,0.87,0.85,0.83, 0.82,0.81]
   dr_sealevel_array = np.array(dr_sealevel)
   dr_2k_array = np.array(dr_2k)
   
@@ -42,6 +42,7 @@ def main():
   if 0 < user_alt <=2000:
     ratio = user_alt/2000
     interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    interp_x = (1-
     
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
