@@ -252,14 +252,14 @@ def main():
 
     
   min_go_34_df = pd.DataFrame(min_go_34)
-  min_go_38_df = pd.DataFrame(min_go_34)
-  min_go_42_df = pd.DataFrame(min_go_34)
-  min_go_46_df = pd.DataFrame(min_go_34)
-  min_go_50_df = pd.DataFrame(min_go_34)
-  min_go_54_df = pd.DataFrame(min_go_34)
-  min_go_58_df = pd.DataFrame(min_go_34)
-  min_go_62_df = pd.DataFrame(min_go_34)
-  min_go_66_df = pd.DataFrame(min_go_34)
+  min_go_38_df = pd.DataFrame(min_go_38)
+  min_go_42_df = pd.DataFrame(min_go_42)
+  min_go_46_df = pd.DataFrame(min_go_46)
+  min_go_50_df = pd.DataFrame(min_go_50)
+  min_go_54_df = pd.DataFrame(min_go_54)
+  min_go_58_df = pd.DataFrame(min_go_58)
+  min_go_62_df = pd.DataFrame(min_go_62)
+  min_go_66_df = pd.DataFrame(min_go_66)
   
   st.write(min_go_66_df)
     
