@@ -261,7 +261,7 @@ def main():
   min_go_62_df = pd.DataFrame(min_go_34)
   min_go_66_df = pd.DataFrame(min_go_34)
   
-  st.write(min_go_34_df)
+  st.write(min_go_66_df)
     
     
     
