@@ -270,10 +270,6 @@ def main():
   if 34000 < user_ac_weight <= 38000:
     
     min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[2,1:], kind='linear', fill_value='extrapolate')
-    mg_interp_array = min_go_interpolated(rwl_expanded)
-    value = min_go_interpolated(6000)
-    
-    st.write(value)
     
     # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
@@ -288,7 +284,10 @@ def main():
 
     st.altair_chart(c, use_container_width = True)
   
+    mg_interp_array = min_go_interpolated(rwl_expanded)
+    value = min_go_interpolated(6000)
     
+    st.write(value)
        
     
     
