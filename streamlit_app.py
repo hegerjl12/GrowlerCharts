@@ -27,9 +27,10 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
-  # get input from user for temperature and altitude
+  # get input from user for temperature and altitude and weight
   user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
   user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
+  user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=58000, step=1000)
   
   # if the field elevation altitude is 0
   if user_alt == 0:
@@ -155,7 +156,8 @@ def main():
     # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
     # output the metric of the density ratio based on the inputs from the user and the interpolation function
-    st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
+    density_ratio_calc = np.round(dr(user_temp)
+    st.metric('Density Ratio', density_ratio_calc, 2), delta=None, delta_color="normal")
     
     
     
@@ -261,8 +263,14 @@ def main():
   min_go_62_df = pd.DataFrame(min_go_62)
   min_go_66_df = pd.DataFrame(min_go_66)
   
-  st.write(min_go_66_df)
+  runway_lengths = [4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
+  runway_lengths_array = np.array(runways_lengths)
+  
+  if 34000 > user_ac_weight >= 38000:
+    min_go_interplated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[2], kind='linear', fill_value='extrapolate')
+    st.write(min_go_interpolated(6000))
     
+       
     
     
 if __name__ == "__main__":
