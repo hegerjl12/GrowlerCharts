@@ -269,7 +269,7 @@ def main():
   
   if 34000 < user_ac_weight <= 38000:
     
-    min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='linear', fill_value='extrapolate')
+    min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='cubic', fill_value='extrapolate')
     
     mg_interp_array = min_go_interpolated(rwl_expanded)
     var = st.number_input('rwl')
