@@ -272,7 +272,8 @@ def main():
     min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='linear', fill_value='extrapolate')
     
     mg_interp_array = min_go_interpolated(rwl_expanded)
-    value = min_go_interpolated(7500)
+    var = st.number_input('rwl')
+    value = min_go_interpolated(var)
     
     st.metric('MinGo', value, delta=None, delta_color="normal")
        
