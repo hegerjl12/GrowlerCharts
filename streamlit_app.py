@@ -24,8 +24,8 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
-  user_temp = st.number_input('Enter Temp (F)', step=1)
-  user_alt = st.number_input('Enter Field Altitude (FT)', step=100)
+  user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
+  user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
   
   if user_alt == 0:
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, dr_sealevel_array, kind='quadratic', fill_value='extrapolate')
