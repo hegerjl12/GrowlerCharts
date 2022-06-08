@@ -268,7 +268,7 @@ def main():
   
   if 34000 < user_ac_weight <= 38000:
     st.write(runway_lengths_array)
-    st.write(min_go_66_df.iloc[2])
+    st.write(min_go_66_df.iloc[2, 1:])
     
     #min_go_interplated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[2], kind='linear', fill_value='extrapolate')
    # st.write(min_go_interpolated(6000))
