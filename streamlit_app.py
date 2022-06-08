@@ -269,7 +269,7 @@ def main():
   
   if 34000 < user_ac_weight <= 38000:
     
-    min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='slinear', fill_value='extrapolate')
+    min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='quadratic', fill_value='extrapolate')
     
     mg_interp_array = min_go_interpolated(rwl_expanded)
     var = st.number_input('rwl')
@@ -277,7 +277,18 @@ def main():
     
     st.metric('MinGo', value, delta=None, delta_color="normal")
        
-    
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+    source = pd.DataFrame({
+      'RWL': rwl_expanded,
+      'MinGo': mg_interp_array = min_go_interpolated(rwl_expanded)
+    })
+
+    c = alt.Chart(source).mark_line().encode(
+        x='RWL',
+        y='MinGo'
+    )
+
+    st.altair_chart(c, use_container_width = True)
     
 if __name__ == "__main__":
   main()
