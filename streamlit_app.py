@@ -271,23 +271,8 @@ def main():
     
     min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[7,1:], kind='quadratic', fill_value='extrapolate')
     
-    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
-    source = pd.DataFrame({
-      'RW Len': rwl_expanded,
-      'Speed': min_go_interpolated(rwl_expanded)
-    })
-
-    c = alt.Chart(source).mark_line().encode(
-        x='RW Len',
-        y='Speed'
-    )
-
-    st.altair_chart(c, use_container_width = True)
-  
     mg_interp_array = min_go_interpolated(rwl_expanded)
-    value = min_go_interpolated(7000)
-    
-    st.write(min_go_df.iloc[7,1:])
+    value = min_go_interpolated(8500)
     
     st.metric('MinGo', value, delta=None, delta_color="normal")
        
