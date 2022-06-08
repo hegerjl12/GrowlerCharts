@@ -274,7 +274,19 @@ def main():
     value = min_go_interpolated(6000)
     
     st.write(value)
-  
+    
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+    source = pd.DataFrame({
+      'RW Len': rwl_expanded,
+      'Speed': min_go_interpolated(rwl_expanded)
+    })
+
+    c = alt.Chart(source).mark_line().encode(
+        x='RW Len',
+        y='Speed'
+    )
+
+    st.altair_chart(c, use_container_width = True)
   
     
        
