@@ -280,7 +280,7 @@ def main():
     # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'RWL': rwl_expanded,
-      'MinGo': mg_interp_array = min_go_interpolated(rwl_expanded)
+      'MinGo': min_go_interpolated(rwl_expanded)
     })
 
     c = alt.Chart(source).mark_line().encode(
