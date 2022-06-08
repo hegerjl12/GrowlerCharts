@@ -271,7 +271,9 @@ def main():
     
     min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[2,1:], kind='linear', fill_value='extrapolate')
     mg_interp_array = min_go_interpolated(rwl_expanded)
-    st.write(min_go_interpolated(6000))
+    value = min_go_interpolated(6000)
+    
+    st.write(value)
   
   
     
