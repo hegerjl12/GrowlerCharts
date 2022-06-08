@@ -7,12 +7,15 @@ import altair as alt
 
 def main():
   
+  # set streamlit config parameters
   st.set_page_config(page_title='F18 Toolbox', page_icon='✈', layout="centered", initial_sidebar_state="auto", menu_items=None)
   
+  # create numpy arrays for the x and y axis values for density ratio chart
   dr_temp_x_input_tendegrees = np.arange(-60,150, 10)
   dr_temp_x_input_onedegrees = np.arange(-60,141)
   dr_dr_y_input = np.arange(0.5,1.31, 0.01, dtype=float)
   
+  # create lists and convert to numpy array of function values from every 10 degrees for each altitude curve on densiry ratio chart
   dr_sealevel = [1.3,1.27,1.23,1.2,1.175,1.15,1.125,1.1,1.08,1.06,1.04,1.02,1.0,0.98,0.96,0.94,0.925,0.91,0.89,0.88,0.86]
   dr_2k = [1.2,1.175,1.15,1.125,1.09,1.07,1.05,1.03,1.01,0.99,0.975,0.95,0.94,0.92,0.9,0.88,0.87,0.85,0.83, 0.82,0.81]
   dr_4k = [1.12,1.09,1.06,1.04,1.02,0.99,0.975,0.96,0.94,0.925,0.9,0.88,0.87,0.85,0.83,0.82,0.8,0.78,0.775,0.765,0.76]
@@ -24,12 +27,16 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
+  # get input from user for temperature and altitude
   user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
   user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
   
+  # if the field elevation altitude is 0
   if user_alt == 0:
+    # create the interpolation function based on the sea level curve
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, dr_sealevel_array, kind='quadratic', fill_value='extrapolate')
     
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'Temp(F)': dr_temp_x_input_onedegrees,
       'Density Ratio': dr(dr_temp_x_input_onedegrees)
@@ -39,18 +46,22 @@ def main():
         x='Temp(F)',
         y='Density Ratio'
     )
-
+    
     st.altair_chart(c, use_container_width = True)
 
+    # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    # output the metric of the density ratio based on the inputs from the user and the interpolation function
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
-    
+  # if the field elevation altitude is between 0 and 2000 ft
   if 0 < user_alt <=2000:
+    # create a ratio for biasing weights on combining curves
     ratio = user_alt/2000
     interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
-    
+    # create the interpolation function based on the combined weighted curve
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'Temp(F)': dr_temp_x_input_onedegrees,
       'Density Ratio': dr(dr_temp_x_input_onedegrees)
@@ -60,18 +71,23 @@ def main():
         x='Temp(F)',
         y='Density Ratio'
     )
-
+    
     st.altair_chart(c, use_container_width = True)
 
+    # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    # output the metric of the density ratio based on the inputs from the user and the interpolation function
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
     
+  # if the field elevation altitude is between 2000 and 4000 ft
   if 2000 < user_alt <=4000:
+    # create a ratio for biasing weights on combining curves
     ratio = (user_alt-2000)/2000
     interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
-    
+    # create the interpolation function based on the combined weighted curve
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'Temp(F)': dr_temp_x_input_onedegrees,
       'Density Ratio': dr(dr_temp_x_input_onedegrees)
@@ -83,16 +99,21 @@ def main():
     )
 
     st.altair_chart(c, use_container_width = True)
-
+    
+    # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    # output the metric of the density ratio based on the inputs from the user and the interpolation function
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
   
+  # if the field elevation altitude is between 4000 and 6000 ft
   if 4000 < user_alt <=6000:
+    # create a ratio for biasing weights on combining curves
     ratio = (user_alt-4000)/2000
     interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
-    
+    # create the interpolation function based on the combined weighted curve
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'Temp(F)': dr_temp_x_input_onedegrees,
       'Density Ratio': dr(dr_temp_x_input_onedegrees)
@@ -104,16 +125,21 @@ def main():
     )
 
     st.altair_chart(c, use_container_width = True)
-
+    
+    # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    # output the metric of the density ratio based on the inputs from the user and the interpolation function
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
     
+  # if the field elevation altitude is between 6000 and 8000 ft
   if 6000 < user_alt <=8000:
+    # create a ratio for biasing weights on combining curves
     ratio = (user_alt-6000)/2000
     interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
-    
+    # create the interpolation function based on the combined weighted curve
     dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
     
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
     source = pd.DataFrame({
       'Temp(F)': dr_temp_x_input_onedegrees,
       'Density Ratio': dr(dr_temp_x_input_onedegrees)
@@ -126,7 +152,9 @@ def main():
 
     st.altair_chart(c, use_container_width = True)
 
+    # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
+    # output the metric of the density ratio based on the inputs from the user and the interpolation function
     st.metric('Density Ratio', np.round(dr(user_temp), 2), delta=None, delta_color="normal")
     
     
