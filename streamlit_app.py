@@ -287,7 +287,7 @@ def main():
     mg_interp_array = min_go_interpolated(rwl_expanded)
     value = min_go_interpolated(6000)
     
-    st.write(value)
+    st.metric('MinGo', value, delta=None, delta_color="normal")
        
     
     
