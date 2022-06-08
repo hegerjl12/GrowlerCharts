@@ -264,7 +264,7 @@ def main():
   min_go_66_df = pd.DataFrame(min_go_66)
   
   runway_lengths = [4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
-  runway_lengths_array = np.array(runways_lengths)
+  runway_lengths_array = np.array(runway_lengths)
   
   if 34000 > user_ac_weight >= 38000:
     min_go_interplated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[2], kind='linear', fill_value='extrapolate')
