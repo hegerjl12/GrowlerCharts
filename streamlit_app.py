@@ -287,6 +287,8 @@ def main():
     mg_interp_array = min_go_interpolated(rwl_expanded)
     value = min_go_interpolated(7000)
     
+    st.write(min_go_df.iloc[7,1:])
+    
     st.metric('MinGo', value, delta=None, delta_color="normal")
        
     
