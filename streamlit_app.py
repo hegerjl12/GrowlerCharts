@@ -156,7 +156,7 @@ def main():
     # create the array of interpolated values based on the curve at every degree
     interp_dr_array = dr(dr_temp_x_input_onedegrees)
     # output the metric of the density ratio based on the inputs from the user and the interpolation function
-    density_ratio_calc = np.round(dr(user_temp)
+    density_ratio_calc = np.round(dr(user_temp))
     st.metric('Density Ratio', density_ratio_calc, 2), delta=None, delta_color="normal")
     
     
