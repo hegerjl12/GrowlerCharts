@@ -227,7 +227,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -272,7 +272,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -317,7 +317,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -362,7 +362,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -407,7 +407,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -452,7 +452,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -497,7 +497,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
@@ -542,7 +542,7 @@ def main():
       
       final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
