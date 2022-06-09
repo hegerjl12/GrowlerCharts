@@ -211,7 +211,7 @@ def main():
     # create a ratio for biasing weights on combining curves
     ratio_weight = (user_ac_weight-34000)/4000
     if 0.70 < density_ratio_calculated <= 0.75:
-      st.write(density_ratio_calc)  
+      st.write(density_ratio_calculated)  
       interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
 
       # create the interpolation function based on the combined weighted curve
