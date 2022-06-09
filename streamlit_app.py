@@ -84,11 +84,9 @@ def calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, inte
 
   st.altair_chart(c, use_container_width = True)
       
-        
   return final_min_go
 
-  
-  
+ 
 def main():
   
   # set streamlit config parameters
@@ -202,7 +200,7 @@ def main():
                '11k': [0,0,0,0,0,80,110,125,135],
                '12k': [0,0,0,0,0,30,100,125,135]}
 
-    
+  
   min_go_34_df = pd.DataFrame(min_go_34)
   min_go_38_df = pd.DataFrame(min_go_38)
   min_go_42_df = pd.DataFrame(min_go_42)
@@ -216,7 +214,6 @@ def main():
   runway_lengths = [4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
   runway_lengths_array = np.array(runway_lengths)
   rwl_expanded = np.arange(4000, 12000, 100)
-  
   
   
   with st.container():
@@ -254,7 +251,6 @@ def main():
     ratio = (user_alt-6000)/2000
     interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
     density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-  
   
   if 34000 < user_ac_weight <= 38000:
     # create a ratio for biasing weights on combining curves
@@ -760,8 +756,6 @@ def main():
 
       final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
-      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
-
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[5,1:] + (ratio_weight)*min_go_66_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[4,1:] + (ratio_weight)*min_go_66_df.iloc[4,1:])
@@ -802,7 +796,6 @@ def main():
 
       final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
-      
       
 if __name__ == "__main__":
   main()
