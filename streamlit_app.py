@@ -36,7 +36,7 @@ def calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_one
   density_ratio_calculated = np.round(dr(user_temp),2)
   st.metric('Density Ratio', density_ratio_calculated, delta=None, delta_color="normal")
   
-  return desity_ratio_calculated
+  return density_ratio_calculated
     
 
 def main():
