@@ -11,11 +11,11 @@ def get_user_inputs():
   with col1:
     user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
   with col2:
-    user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
+    user_alt = st.number_input('Enter Field Elevation (ft)', value=0, step=100)
   with col3:
     user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=56000, step=1000)
   with col4:
-    user_runway_length = st.number_input('Enter Runway Length (FT)', value=8000, step=100)
+    user_runway_length = st.number_input('Enter Runway Length (ft)', value=8000, step=100)
   
   return user_temp, user_alt, user_ac_weight, user_runway_length
 
