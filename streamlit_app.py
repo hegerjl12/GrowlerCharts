@@ -225,7 +225,7 @@ def main():
       
       ratio_2 = (density_ratio_calculated-0.7)/0.05
       
-      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calcluated_upper
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
       st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
 
