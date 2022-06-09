@@ -232,7 +232,20 @@ def main():
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
         'RWL': rwl_expanded,
-        'MinGo': min_go_interpolated(rwl_expanded)
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
       })
 
       c = alt.Chart(source).mark_line().encode(
