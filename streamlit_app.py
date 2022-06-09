@@ -48,7 +48,7 @@ def calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_one
 def main():
   
   # set streamlit config parameters
-  st.set_page_config(page_title='F18 Toolbox', page_icon='✈', layout="centered", initial_sidebar_state="auto", menu_items=None)
+  st.set_page_config(page_title='Growler Toolbox', page_icon='✈', layout="centered", initial_sidebar_state="auto", menu_items=None)
   
   # create numpy arrays for the x and y axis values for density ratio chart
   dr_temp_x_input_tendegrees = np.arange(-60,150, 10)
