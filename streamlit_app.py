@@ -56,7 +56,7 @@ def calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, inte
   
   final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
   
-  st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
+  st.metric('MinGo', str(np.round(final_min_go,2))+'KCAS', delta=None, delta_color="normal")
 
   # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
   source = pd.DataFrame({
