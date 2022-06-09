@@ -286,7 +286,7 @@ def main():
       
  #     final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-       final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_lenth)
+      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_lenth)
 
      # st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
 
