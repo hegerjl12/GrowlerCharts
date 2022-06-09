@@ -4,6 +4,14 @@ import numpy as np
 from scipy import interpolate
 import altair as alt
 
+def get_user_inputs():
+  # get input from user for temperature and altitude and weight
+  user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
+  user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
+  user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=56000, step=1000)
+  user_runway_length = st.number_input('Enter Runway Length (FT)', value=8000, step=100)
+  
+  return user_temp, user_alt, user_ac_weight, user_runway_length
 
 def main():
   
@@ -27,11 +35,7 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
-  # get input from user for temperature and altitude and weight
-  user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
-  user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
-  user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=56000, step=1000)
-  user_runway_length = st.number_input('Enter Runway Length (FT)', value=8000, step=100)
+  user_temp, user_alt, user_ac_weight, user_runway_length = get_user_inputs()
   
   # if the field elevation altitude is 0
   if user_alt == 0:
@@ -277,6 +281,7 @@ def main():
   #  if 0.70 < density_ratio_calc <= 0.75:
   #  st.write(density_ratio_calc)  
     interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
+    
     # create the interpolation function based on the combined weighted curve
     min_go_interpolated = interpolate.interp1d(runway_lengths_array, interp_ys_weightcurve, kind='quadratic', fill_value='extrapolate')
 
