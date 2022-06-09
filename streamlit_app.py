@@ -210,17 +210,24 @@ def main():
   if 34000 < user_ac_weight <= 38000:
     # create a ratio for biasing weights on combining curves
     ratio_weight = (user_ac_weight-34000)/4000
-    if 0.70 < density_ratio_calculated <= 0.75:
-      st.write(density_ratio_calculated)  
-      interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
+    if 0.70 <= density_ratio_calculated <= 0.75:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
 
       # create the interpolation function based on the combined weighted curve
-      min_go_interpolated = interpolate.interp1d(runway_lengths_array, interp_ys_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
 
-      mg_interp_array = min_go_interpolated(rwl_expanded)
-      min_go_calculated = min_go_interpolated(user_runway_length)
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.7)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calcluated_upper
 
-      st.metric('MinGo', min_go_calculated, delta=None, delta_color="normal")
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
 
       # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
       source = pd.DataFrame({
