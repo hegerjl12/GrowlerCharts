@@ -254,6 +254,323 @@ def main():
       )
 
       st.altair_chart(c, use_container_width = True)
+      
+    if 0.75 < density_ratio_calculated <= 0.8:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[6,1:] + (ratio_weight)*min_go_38_df.iloc[6,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.75)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 0.8 < density_ratio_calculated <= 0.85:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[6,1:] + (ratio_weight)*min_go_38_df.iloc[6,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[5,1:] + (ratio_weight)*min_go_38_df.iloc[5,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.8)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 0.85 < density_ratio_calculated <= 0.9:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[5,1:] + (ratio_weight)*min_go_38_df.iloc[5,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[4,1:] + (ratio_weight)*min_go_38_df.iloc[4,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.85)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 0.9 < density_ratio_calculated <= 0.95:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[4,1:] + (ratio_weight)*min_go_38_df.iloc[4,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[3,1:] + (ratio_weight)*min_go_38_df.iloc[3,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.9)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 0.95 < density_ratio_calculated <= 1.0:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[3,1:] + (ratio_weight)*min_go_38_df.iloc[3,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[2,1:] + (ratio_weight)*min_go_38_df.iloc[2,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-0.95)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 1.0 < density_ratio_calculated <= 1.05:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[2,1:] + (ratio_weight)*min_go_38_df.iloc[2,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[1,1:] + (ratio_weight)*min_go_38_df.iloc[1,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-1.0)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+    if 1.05 < density_ratio_calculated <= 1.1:
+      interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[1,1:] + (ratio_weight)*min_go_38_df.iloc[1,1:])
+      interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[0,1:] + (ratio_weight)*min_go_38_df.iloc[0,1:])
+
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
+
+      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      ratio_2 = (density_ratio_calculated-1.05)/0.05
+      
+      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+
+      st.metric('MinGo', final_min_go, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_lower(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+      
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated_upper(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+
+
 
 if __name__ == "__main__":
   main()
