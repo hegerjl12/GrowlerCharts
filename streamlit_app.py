@@ -274,29 +274,29 @@ def main():
   if 34000 < user_ac_weight <= 38000:
     # create a ratio for biasing weights on combining curves
     ratio_weight = (user_ac_weight-34000)/4000
-    if 0.70 < density_ratio_calc <= 0.75:
-      
-      interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
-      # create the interpolation function based on the combined weighted curve
-      min_go_interpolated = interpolate.interp1d(runway_lengths_array, interp_ys_weightcurve, kind='quadratic', fill_value='extrapolate')
+  #  if 0.70 < density_ratio_calc <= 0.75:
+    st.write(density_ratio_calc)  
+    interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
+    # create the interpolation function based on the combined weighted curve
+    min_go_interpolated = interpolate.interp1d(runway_lengths_array, interp_ys_weightcurve, kind='quadratic', fill_value='extrapolate')
 
-      mg_interp_array = min_go_interpolated(rwl_expanded)
-      min_go_calculated = min_go_interpolated(user_runway_length)
+    mg_interp_array = min_go_interpolated(rwl_expanded)
+    min_go_calculated = min_go_interpolated(user_runway_length)
 
-      st.metric('MinGo', min_go_calculated, delta=None, delta_color="normal")
+    st.metric('MinGo', min_go_calculated, delta=None, delta_color="normal")
 
-      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
-      source = pd.DataFrame({
-        'RWL': rwl_expanded,
-        'MinGo': min_go_interpolated(rwl_expanded)
-      })
+    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+    source = pd.DataFrame({
+      'RWL': rwl_expanded,
+      'MinGo': min_go_interpolated(rwl_expanded)
+    })
 
-      c = alt.Chart(source).mark_line().encode(
-          x='RWL',
-          y='MinGo'
-      )
+    c = alt.Chart(source).mark_line().encode(
+        x='RWL',
+        y='MinGo'
+    )
 
-      st.altair_chart(c, use_container_width = True)
+    st.altair_chart(c, use_container_width = True)
 
 if __name__ == "__main__":
   main()
