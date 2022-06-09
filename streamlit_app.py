@@ -20,7 +20,7 @@ def get_user_inputs():
   return user_temp, user_alt, user_ac_weight, user_runway_length
 
 def calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp):
-    # create the interpolation function based on the combined weighted curve
+   # create the interpolation function based on the combined weighted curve
   dr = interpolate.interp1d(dr_temp_x_input_tendegrees, interp_y, kind='quadratic', fill_value='extrapolate')
 
   # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
@@ -44,7 +44,55 @@ def calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_one
   
   return density_ratio_calculated
     
+def calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_lenth):
+  # create the interpolation function based on the combined weighted curve
+  min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+  min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
 
+  mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+  mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+  min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+  min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+  
+  
+  final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
+  
+  st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
+
+  # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+  source = pd.DataFrame({
+    'RWL': rwl_expanded,
+    'MinGo': min_go_interpolated_lower(rwl_expanded)
+  })
+
+  c = alt.Chart(source).mark_line().encode(
+      x='RWL',
+      y='MinGo'
+  )
+
+  st.altair_chart(c, use_container_width = True)
+
+  # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+  source = pd.DataFrame({
+    'RWL': rwl_expanded,
+    'MinGo': min_go_interpolated_upper(rwl_expanded)
+  })
+
+  c = alt.Chart(source).mark_line().encode(
+      x='RWL',
+      y='MinGo'
+  )
+
+  st.altair_chart(c, use_container_width = True)
+      
+      
+      
+  # min_go_interpolated_lower, min_go_interpolated_upper, mg_interp_array_lower, mg_interp_array_upper, min_go_calculated_lower, min_go_calculated_upper
+
+  return final_min_go
+
+  
+  
 def main():
   
   # set streamlit config parameters
@@ -67,47 +115,6 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
-  with st.container():
-    user_temp, user_alt, user_ac_weight, user_runway_length = get_user_inputs()
-  
-  
-  # if the field elevation altitude is 0
-  if user_alt == 0:
-    interp_y = dr_sealevel_array
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-    
-  # if the field elevation altitude is between 0 and 2000 ft
-  if 0 < user_alt <=2000:
-    # create a ratio for biasing weights on combining curves
-    ratio = (user_alt)/2000
-    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-    
-  # if the field elevation altitude is between 2000 and 4000 ft
-  if 2000 < user_alt <=4000:
-    # create a ratio for biasing weights on combining curves
-    ratio = (user_alt-2000)/2000
-    interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-    
-  # if the field elevation altitude is between 4000 and 6000 ft
-  if 4000 < user_alt <=6000:
-    # create a ratio for biasing weights on combining curves
-    ratio = (user_alt-4000)/2000
-    interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-    
-  # if the field elevation altitude is between 6000 and 8000 ft
-  if 6000 < user_alt <=8000:
-    # create a ratio for biasing weights on combining curves
-    ratio = (user_alt-6000)/2000
-    interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
-      
-    
-    
-    
-    
   min_go_34 = {'DR': [1.1,1.05,1.0,0.95,0.9,0.85,0.8,0.75,0.7],
                '4k': [0,0,0,0,0,0,0,0,60],
                '5k': [0,0,0,0,0,0,0,0,0],
@@ -214,53 +221,76 @@ def main():
   runway_lengths_array = np.array(runway_lengths)
   rwl_expanded = np.arange(4000, 12000, 100)
   
+  
+  
+  with st.container():
+    user_temp, user_alt, user_ac_weight, user_runway_length = get_user_inputs()
+  
+  # if the field elevation altitude is 0
+  if user_alt == 0:
+    interp_y = dr_sealevel_array
+    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    
+  # if the field elevation altitude is between 0 and 2000 ft
+  if 0 < user_alt <=2000:
+    # create a ratio for biasing weights on combining curves
+    ratio = (user_alt)/2000
+    interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
+    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    
+  # if the field elevation altitude is between 2000 and 4000 ft
+  if 2000 < user_alt <=4000:
+    # create a ratio for biasing weights on combining curves
+    ratio = (user_alt-2000)/2000
+    interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
+    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    
+  # if the field elevation altitude is between 4000 and 6000 ft
+  if 4000 < user_alt <=6000:
+    # create a ratio for biasing weights on combining curves
+    ratio = (user_alt-4000)/2000
+    interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
+    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    
+  # if the field elevation altitude is between 6000 and 8000 ft
+  if 6000 < user_alt <=8000:
+    # create a ratio for biasing weights on combining curves
+    ratio = (user_alt-6000)/2000
+    interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
+    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+  
+  
   if 34000 < user_ac_weight <= 38000:
     # create a ratio for biasing weights on combining curves
     ratio_weight = (user_ac_weight-34000)/4000
+    
     if 0.70 <= density_ratio_calculated <= 0.75:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
 
-      # create the interpolation function based on the combined weighted curve
-      min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
-      min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
-
-      mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
-      mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
-      min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
-      min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
-      
       ratio_2 = (density_ratio_calculated-0.7)/0.05
       
-      final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
-
-      st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
-
-      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
-      source = pd.DataFrame({
-        'RWL': rwl_expanded,
-        'MinGo': min_go_interpolated_lower(rwl_expanded)
-      })
-
-      c = alt.Chart(source).mark_line().encode(
-          x='RWL',
-          y='MinGo'
-      )
-
-      st.altair_chart(c, use_container_width = True)
       
-      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
-      source = pd.DataFrame({
-        'RWL': rwl_expanded,
-        'MinGo': min_go_interpolated_upper(rwl_expanded)
-      })
+      # create the interpolation function based on the combined weighted curve
+   #   min_go_interpolated_lower = interpolate.interp1d(runway_lengths_array, interp_ys_lower_weightcurve, kind='quadratic', fill_value='extrapolate')
+   #   min_go_interpolated_upper = interpolate.interp1d(runway_lengths_array, interp_ys_upper_weightcurve, kind='quadratic', fill_value='extrapolate')
 
-      c = alt.Chart(source).mark_line().encode(
-          x='RWL',
-          y='MinGo'
-      )
+   #   mg_interp_array_lower = min_go_interpolated_lower(rwl_expanded)
+  #    mg_interp_array_upper = min_go_interpolated_upper(rwl_expanded)
+  #    min_go_calculated_lower = min_go_interpolated_lower(user_runway_length)
+ #     min_go_calculated_upper = min_go_interpolated_upper(user_runway_length)
+      
+      
+      
+      
+      
+ #     final_min_go = (1-ratio_2)*min_go_calculated_lower + ratio_2*min_go_calculated_upper
 
-      st.altair_chart(c, use_container_width = True)
+       final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_lenth)
+
+     # st.metric('MinGo', np.round(final_min_go,2), delta=None, delta_color="normal")
+
+      
       
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
