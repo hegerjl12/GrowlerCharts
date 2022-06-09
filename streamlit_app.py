@@ -30,7 +30,8 @@ def main():
   # get input from user for temperature and altitude and weight
   user_temp = st.number_input('Enter Temp (F)', value=60, step=1)
   user_alt = st.number_input('Enter Field Altitude (FT)', value=0, step=100)
-  user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=58000, step=1000)
+  user_ac_weight = st.number_input('Enter Aircraft Weight (lbs)', value=56000, step=1000)
+  user_runway_length = st.number_input('Enter Runway Length (FT)', value=8000, step=100)
   
   # if the field elevation altitude is 0
   if user_alt == 0:
@@ -161,6 +162,9 @@ def main():
     
     
     
+    
+    
+    
   min_go_34 = {'DR': [1.1,1.05,1.0,0.95,0.9,0.85,0.8,0.75,0.7],
                '4k': [0,0,0,0,0,0,0,0,60],
                '5k': [0,0,0,0,0,0,0,0,0],
@@ -268,27 +272,31 @@ def main():
   rwl_expanded = np.arange(4000, 12000, 100)
   
   if 34000 < user_ac_weight <= 38000:
-    
-    min_go_interpolated = interpolate.interp1d(runway_lengths_array, min_go_66_df.iloc[4,1:], kind='quadratic', fill_value='extrapolate')
-    
-    mg_interp_array = min_go_interpolated(rwl_expanded)
-    var = st.number_input('rwl')
-    value = min_go_interpolated(var)
-    
-    st.metric('MinGo', value, delta=None, delta_color="normal")
-       
-    # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
-    source = pd.DataFrame({
-      'RWL': rwl_expanded,
-      'MinGo': min_go_interpolated(rwl_expanded)
-    })
+    # create a ratio for biasing weights on combining curves
+    ratio_weight = (user_ac_weight-34000)/4000
+    if 0.70 < density_ratio_calc <= 0.75:
+      
+      interp_ys_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[8,1:] + (ratio_weight)*min_go_38_df.iloc[8,1:])
+      # create the interpolation function based on the combined weighted curve
+      min_go_interpolated = interpolate.interp1d(runway_lengths_array, interp_ys_weightcurve, kind='quadratic', fill_value='extrapolate')
 
-    c = alt.Chart(source).mark_line().encode(
-        x='RWL',
-        y='MinGo'
-    )
+      mg_interp_array = min_go_interpolated(rwl_expanded)
+      min_go_calculated = min_go_interpolated(user_runway_length)
 
-    st.altair_chart(c, use_container_width = True)
-    
+      st.metric('MinGo', min_go_calculated, delta=None, delta_color="normal")
+
+      # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
+      source = pd.DataFrame({
+        'RWL': rwl_expanded,
+        'MinGo': min_go_interpolated(rwl_expanded)
+      })
+
+      c = alt.Chart(source).mark_line().encode(
+          x='RWL',
+          y='MinGo'
+      )
+
+      st.altair_chart(c, use_container_width = True)
+
 if __name__ == "__main__":
   main()
