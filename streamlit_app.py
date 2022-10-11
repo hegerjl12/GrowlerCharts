@@ -95,6 +95,7 @@ def main():
   st.title('Growler TOLD')
   st.caption('Disclaimer:   Always reference the PCL charts for official TOLD data.')
   st.write('')
+  input_tab, max_dry_tab = st.tabs(['Inputs', 'MAX/Dry Runway'])
   
   # create numpy arrays for the x and y axis values for density ratio chart
   dr_temp_x_input_tendegrees = np.arange(-60,150, 10)
@@ -219,42 +220,47 @@ def main():
   runway_lengths_array = np.array(runway_lengths)
   rwl_expanded = np.arange(4000, 12000, 100)
   
-  
-  with st.container():
-    user_temp, user_alt, user_ac_weight, user_runway_length = get_user_inputs()
+  with input_tab:
+      with st.container():
+        user_temp, user_alt, user_ac_weight, user_runway_length = get_user_inputs()
   
   # if the field elevation altitude is 0
   if user_alt == 0:
     interp_y = dr_sealevel_array
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    with max_dry_tab:
+        density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
     
   # if the field elevation altitude is between 0 and 2000 ft
   if 0 < user_alt <=2000:
     # create a ratio for biasing weights on combining curves
     ratio = (user_alt)/2000
     interp_y = ((1-ratio)*dr_sealevel_array + (ratio)*dr_2k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    with max_dry_tab:
+        density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
     
   # if the field elevation altitude is between 2000 and 4000 ft
   if 2000 < user_alt <=4000:
     # create a ratio for biasing weights on combining curves
     ratio = (user_alt-2000)/2000
     interp_y = ((1-ratio)*dr_2k_array + (ratio)*dr_4k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    with max_dry_tab:
+        density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
     
   # if the field elevation altitude is between 4000 and 6000 ft
   if 4000 < user_alt <=6000:
     # create a ratio for biasing weights on combining curves
     ratio = (user_alt-4000)/2000
     interp_y = ((1-ratio)*dr_4k_array + (ratio)*dr_6k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    with max_dry_tab:
+        density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
     
   # if the field elevation altitude is between 6000 and 8000 ft
   if 6000 < user_alt <=8000:
     # create a ratio for biasing weights on combining curves
     ratio = (user_alt-6000)/2000
     interp_y = ((1-ratio)*dr_6k_array + (ratio)*dr_8k_array)
-    density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
+    with max_dry_tab:
+        density_ratio_calculated = calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_onedegrees, user_temp)
   
   if 34000 < user_ac_weight <= 38000:
     # create a ratio for biasing weights on combining curves
@@ -265,64 +271,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
       
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[7,1:] + (ratio_weight)*min_go_38_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[6,1:] + (ratio_weight)*min_go_38_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
       
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[6,1:] + (ratio_weight)*min_go_38_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[5,1:] + (ratio_weight)*min_go_38_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
       
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[5,1:] + (ratio_weight)*min_go_38_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[4,1:] + (ratio_weight)*min_go_38_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[4,1:] + (ratio_weight)*min_go_38_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[3,1:] + (ratio_weight)*min_go_38_df.iloc[3,1:])
       
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[3,1:] + (ratio_weight)*min_go_38_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[2,1:] + (ratio_weight)*min_go_38_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[2,1:] + (ratio_weight)*min_go_38_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[1,1:] + (ratio_weight)*min_go_38_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[1,1:] + (ratio_weight)*min_go_38_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_34_df.iloc[0,1:] + (ratio_weight)*min_go_38_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-      
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
   if 38000 < user_ac_weight <= 42000:
     # create a ratio for biasing weights on combining curves
@@ -333,64 +339,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[7,1:] + (ratio_weight)*min_go_42_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[7,1:] + (ratio_weight)*min_go_42_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[6,1:] + (ratio_weight)*min_go_42_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[6,1:] + (ratio_weight)*min_go_42_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[5,1:] + (ratio_weight)*min_go_42_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[5,1:] + (ratio_weight)*min_go_42_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[4,1:] + (ratio_weight)*min_go_42_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[4,1:] + (ratio_weight)*min_go_42_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[3,1:] + (ratio_weight)*min_go_42_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[3,1:] + (ratio_weight)*min_go_42_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[2,1:] + (ratio_weight)*min_go_42_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[2,1:] + (ratio_weight)*min_go_42_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[1,1:] + (ratio_weight)*min_go_42_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[1,1:] + (ratio_weight)*min_go_42_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_38_df.iloc[0,1:] + (ratio_weight)*min_go_42_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
   if 42000 < user_ac_weight <= 46000:
     # create a ratio for biasing weights on combining curves
@@ -401,64 +407,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[7,1:] + (ratio_weight)*min_go_46_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[7,1:] + (ratio_weight)*min_go_46_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[6,1:] + (ratio_weight)*min_go_46_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[6,1:] + (ratio_weight)*min_go_46_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[5,1:] + (ratio_weight)*min_go_46_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[5,1:] + (ratio_weight)*min_go_46_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[4,1:] + (ratio_weight)*min_go_46_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[4,1:] + (ratio_weight)*min_go_46_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[3,1:] + (ratio_weight)*min_go_46_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[3,1:] + (ratio_weight)*min_go_46_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[2,1:] + (ratio_weight)*min_go_46_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[2,1:] + (ratio_weight)*min_go_46_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[1,1:] + (ratio_weight)*min_go_46_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[1,1:] + (ratio_weight)*min_go_46_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_42_df.iloc[0,1:] + (ratio_weight)*min_go_46_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)  
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)  
 
   if 46000 < user_ac_weight <= 50000:
     # create a ratio for biasing weights on combining curves
@@ -469,64 +475,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[7,1:] + (ratio_weight)*min_go_50_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[7,1:] + (ratio_weight)*min_go_50_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[6,1:] + (ratio_weight)*min_go_50_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[6,1:] + (ratio_weight)*min_go_50_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[5,1:] + (ratio_weight)*min_go_50_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[5,1:] + (ratio_weight)*min_go_50_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[4,1:] + (ratio_weight)*min_go_50_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[4,1:] + (ratio_weight)*min_go_50_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[3,1:] + (ratio_weight)*min_go_50_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[3,1:] + (ratio_weight)*min_go_50_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[2,1:] + (ratio_weight)*min_go_50_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[2,1:] + (ratio_weight)*min_go_50_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[1,1:] + (ratio_weight)*min_go_50_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[1,1:] + (ratio_weight)*min_go_50_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_46_df.iloc[0,1:] + (ratio_weight)*min_go_50_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
       
   if 50000 < user_ac_weight <= 54000:
     # create a ratio for biasing weights on combining curves
@@ -537,64 +543,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[7,1:] + (ratio_weight)*min_go_54_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[7,1:] + (ratio_weight)*min_go_54_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[6,1:] + (ratio_weight)*min_go_54_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[6,1:] + (ratio_weight)*min_go_54_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[5,1:] + (ratio_weight)*min_go_54_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[5,1:] + (ratio_weight)*min_go_54_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[4,1:] + (ratio_weight)*min_go_54_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[4,1:] + (ratio_weight)*min_go_54_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[3,1:] + (ratio_weight)*min_go_54_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[3,1:] + (ratio_weight)*min_go_54_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[2,1:] + (ratio_weight)*min_go_54_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[2,1:] + (ratio_weight)*min_go_54_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[1,1:] + (ratio_weight)*min_go_54_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[1,1:] + (ratio_weight)*min_go_54_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_50_df.iloc[0,1:] + (ratio_weight)*min_go_54_df.iloc[0,1:])
-
+      
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
   if 54000 < user_ac_weight <= 58000:
     # create a ratio for biasing weights on combining curves
@@ -605,64 +611,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[7,1:] + (ratio_weight)*min_go_58_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[7,1:] + (ratio_weight)*min_go_58_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[6,1:] + (ratio_weight)*min_go_58_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[6,1:] + (ratio_weight)*min_go_58_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[5,1:] + (ratio_weight)*min_go_58_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[5,1:] + (ratio_weight)*min_go_58_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[4,1:] + (ratio_weight)*min_go_58_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[4,1:] + (ratio_weight)*min_go_58_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[3,1:] + (ratio_weight)*min_go_58_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[3,1:] + (ratio_weight)*min_go_58_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[2,1:] + (ratio_weight)*min_go_58_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[2,1:] + (ratio_weight)*min_go_58_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[1,1:] + (ratio_weight)*min_go_58_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[1,1:] + (ratio_weight)*min_go_58_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_54_df.iloc[0,1:] + (ratio_weight)*min_go_58_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
   if 58000 < user_ac_weight <= 62000:
     # create a ratio for biasing weights on combining curves
@@ -673,64 +679,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[7,1:] + (ratio_weight)*min_go_62_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[7,1:] + (ratio_weight)*min_go_62_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[6,1:] + (ratio_weight)*min_go_62_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[6,1:] + (ratio_weight)*min_go_62_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[5,1:] + (ratio_weight)*min_go_62_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[5,1:] + (ratio_weight)*min_go_62_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[4,1:] + (ratio_weight)*min_go_62_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[4,1:] + (ratio_weight)*min_go_62_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[3,1:] + (ratio_weight)*min_go_62_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[3,1:] + (ratio_weight)*min_go_62_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[2,1:] + (ratio_weight)*min_go_62_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[2,1:] + (ratio_weight)*min_go_62_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[1,1:] + (ratio_weight)*min_go_62_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[1,1:] + (ratio_weight)*min_go_62_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_58_df.iloc[0,1:] + (ratio_weight)*min_go_62_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
       
   if 62000 < user_ac_weight <= 66000:
     # create a ratio for biasing weights on combining curves
@@ -741,64 +747,64 @@ def main():
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[7,1:] + (ratio_weight)*min_go_66_df.iloc[7,1:])
 
       ratio_2 = (density_ratio_calculated-0.7)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.75 < density_ratio_calculated <= 0.8:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[7,1:] + (ratio_weight)*min_go_66_df.iloc[7,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[6,1:] + (ratio_weight)*min_go_66_df.iloc[6,1:])
 
       ratio_2 = (density_ratio_calculated-0.75)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.8 < density_ratio_calculated <= 0.85:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[6,1:] + (ratio_weight)*min_go_66_df.iloc[6,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[5,1:] + (ratio_weight)*min_go_66_df.iloc[5,1:])
 
       ratio_2 = (density_ratio_calculated-0.8)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.85 < density_ratio_calculated <= 0.9:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[5,1:] + (ratio_weight)*min_go_66_df.iloc[5,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[4,1:] + (ratio_weight)*min_go_66_df.iloc[4,1:])
 
       ratio_2 = (density_ratio_calculated-0.85)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.9 < density_ratio_calculated <= 0.95:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[4,1:] + (ratio_weight)*min_go_66_df.iloc[4,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[3,1:] + (ratio_weight)*min_go_66_df.iloc[3,1:])
 
       ratio_2 = (density_ratio_calculated-0.9)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 0.95 < density_ratio_calculated <= 1.0:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[3,1:] + (ratio_weight)*min_go_66_df.iloc[3,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[2,1:] + (ratio_weight)*min_go_66_df.iloc[2,1:])
 
       ratio_2 = (density_ratio_calculated-0.95)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.0 < density_ratio_calculated <= 1.05:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[2,1:] + (ratio_weight)*min_go_66_df.iloc[2,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[1,1:] + (ratio_weight)*min_go_66_df.iloc[1,1:])
 
       ratio_2 = (density_ratio_calculated-1.0)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
     if 1.05 < density_ratio_calculated <= 1.1:
       interp_ys_lower_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[1,1:] + (ratio_weight)*min_go_66_df.iloc[1,1:])
       interp_ys_upper_weightcurve = ((1-ratio_weight)*min_go_62_df.iloc[0,1:] + (ratio_weight)*min_go_66_df.iloc[0,1:])
 
       ratio_2 = (density_ratio_calculated-1.05)/0.05
-
-      final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
+      with max_dry_tab:
+          final_min_go = calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, interp_ys_upper_weightcurve, rwl_expanded, user_runway_length)
 
       
 if __name__ == "__main__":
