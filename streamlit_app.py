@@ -92,6 +92,12 @@ def main():
   # set streamlit config parameters
   st.set_page_config(page_title='Growler TOLD', page_icon='🗒️', layout="centered", initial_sidebar_state="auto", menu_items=None)
   
+  # Set page attributes
+  st.markdown(""" <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style> """, unsafe_allow_html=True)
+  
   st.title('Growler TOLD')
   st.caption('Disclaimer:   Always reference the PCL charts for official TOLD data.')
   st.write('')
