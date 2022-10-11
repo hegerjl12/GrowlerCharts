@@ -34,7 +34,7 @@ def calc_density_ratio(interp_y, dr_temp_x_input_tendegrees, dr_temp_x_input_one
       y='Density Ratio'
   )
 
-  st.altair_chart(c, use_container_width = True)
+ # st.altair_chart(c, use_container_width = True)
 
   # create the array of interpolated values based on the curve at every degree
   interp_dr_array = dr(dr_temp_x_input_onedegrees)
@@ -69,7 +69,7 @@ def calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, inte
       y='MinGo'
   )
 
-  st.altair_chart(c, use_container_width = True)
+ # st.altair_chart(c, use_container_width = True)
 
   # create the altair chart of this curve for every degree on the x axis and run though function for plotted values
   source = pd.DataFrame({
@@ -82,7 +82,7 @@ def calc_min_go(ratio_2, runway_lengths_array, interp_ys_lower_weightcurve, inte
       y='MinGo'
   )
 
-  st.altair_chart(c, use_container_width = True)
+#  st.altair_chart(c, use_container_width = True)
       
   return final_min_go
 
