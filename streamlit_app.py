@@ -93,7 +93,8 @@ def main():
   st.set_page_config(page_title='Growler TOLD', page_icon='🗒️', layout="centered", initial_sidebar_state="auto", menu_items=None)
   
   st.title('Growler TOLD')
-  st.caption('Disclaimer:  This TOLD calculator is for quick checks, always reference the PCL charts for official TOLD data.')
+  st.caption('Disclaimer:   Always reference the PCL charts for official TOLD data.')
+  st.write('')
   
   # create numpy arrays for the x and y axis values for density ratio chart
   dr_temp_x_input_tendegrees = np.arange(-60,150, 10)
