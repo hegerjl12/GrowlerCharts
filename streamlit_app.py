@@ -127,6 +127,19 @@ def main():
   dr_6k_array = np.array(dr_6k)
   dr_8k_array = np.array(dr_8k)
   
+  mingo_df = pd.read_csv('MinGo.csv')
+  mingo_dr_steps = mingo_df['DR']
+  mingo_34 = mingo_df['34k-4k', '34k-5k', '34k-6k', '34k-7k', '34k-8k', '34k-9k', '34k-10k', '34k-11k', '34k-12k']
+  mingo_38 = mingo_df['38k-4k', '38k-5k', '38k-6k', '38k-7k', '38k-8k', '38k-9k', '38k-10k', '38k-11k', '38k-12k']
+  mingo_42 = mingo_df['42k-4k', '42k-5k', '42k-6k', '42k-7k', '42k-8k', '42k-9k', '42k-10k', '42k-11k', '42k-12k']
+  mingo_46 = mingo_df['46k-4k', '46k-5k', '46k-6k', '46k-7k', '46k-8k', '46k-9k', '46k-10k', '46k-11k', '46k-12k']
+  mingo_50 = mingo_df['50k-4k', '50k-5k', '50k-6k', '50k-7k', '50k-8k', '50k-9k', '50k-10k', '50k-11k', '50k-12k']
+  mingo_54 = mingo_df['54k-4k', '54k-5k', '54k-6k', '54k-7k', '54k-8k', '54k-9k', '54k-10k', '54k-11k', '54k-12k']
+  mingo_58 = mingo_df['58k-4k', '58k-5k', '58k-6k', '58k-7k', '58k-8k', '58k-9k', '58k-10k', '58k-11k', '58k-12k']
+  mingo_62 = mingo_df['62k-4k', '62k-5k', '62k-6k', '62k-7k', '62k-8k', '62k-9k', '62k-10k', '62k-11k', '62k-12k']
+  mingo_66 = mingo_df['66k-4k', '66k-5k', '66k-6k', '66k-7k', '66k-8k', '66k-9k', '66k-10k', '66k-11k', '66k-12k']
+  
+  
   min_go_34 = {'DR': [1.1,1.05,1.0,0.95,0.9,0.85,0.8,0.75,0.7],
                '4k': [0,0,0,0,0,0,0,0,60],
                '5k': [0,0,0,0,0,0,0,0,0],
